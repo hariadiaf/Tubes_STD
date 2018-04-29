@@ -14,7 +14,7 @@ using namespace std;
 
 typedef struct elmRelasi *address_relasi;
 struct relasi{
-    char grade;
+    string grade;
     long gradeBudget;
 };
 typedef relasi infotypeR;

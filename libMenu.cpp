@@ -148,7 +148,7 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
         cout<<"2. Lihat Event Yang Didukung\n";
         cout<<"pilih : "; cin>>pilih;
     if(pilih == 1){
-        char pilGrade;
+        int pilGrade;
         system("cls");
         address_relasi R;
         address_child C;
@@ -167,12 +167,13 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
             cout<<"Nama Event : "<<info(P).nameEvent<<endl;
             cout<<"Dana Yang Dibutuhkan : "<<info(P).needBudget<<endl;
             cout<<"Grade Dukungan : \n";
-            cout<<"A = 1000000\n";
-            cout<<"B = 500000\n";
-            cout<<"C = 250000\n";
-            cout<<"D = 150000\n";
-            cout<<"E = 100000\n";
-            cout<<"F = 50000\n";
+            cout<<"1.Super-Uranium = 100%\n";
+            cout<<"2.Uranium = 65%\n";
+            cout<<"3.Platinum = 50%\n";
+            cout<<"4.Gold = 25%\n";
+            cout<<"5.Silver = 15%\n";
+            cout<<"6.Bronze = 10%\n";
+            cout<<"7.Reguler = 5%\n";
             cout<<"Pilih Grade Dukungan : "; cin>>pilGrade;
             cout<<"Masukan nama sponsor anda : "; cin>>nmSponsor;
             C = cariSponsor(Lsponsor,nmSponsor);
@@ -181,11 +182,11 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
             system("pause");
         }
 
-            if(pilGrade == 'A'&&C!=NULL){
-                infoR.grade = 'A';
-                infoR.gradeBudget = 1000000;
+            if(pilGrade == 1&&C!=NULL){
+                infoR.grade = 'Super-Uranium';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*100)/100);
 
-                if(info(C).budget>=1000000){
+                if(info(C).budget>=0){
                     long budgetSponsor = info(C).budget;
                     info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
 
@@ -195,38 +196,18 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                     R = alokasi(P,C,infoR);
                     insertFirst(Lrelasi,R);
 
-                    cout<<"Selamat anda berhasil donasi sebesar Rp.1.000.000\n";
+                    cout<<"Selamat anda berhasil donasi sebesar "<<info(R).gradeBudget;
                     system("pause");
                 }else{
                      cout<<"Maaf Budget Anda tidak cukup!!";
                      system("pause");
                 }
 
-            }else if(pilGrade == 'B'&&C!=NULL){
-                infoR.grade = 'B';
-                infoR.gradeBudget = 500000;
+            }else if(pilGrade == 2&&C!=NULL){
+                infoR.grade = 'Uranium';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*65)/100);
 
-                if(info(C).budget>=500000){
-                    long budgetSponsor = info(C).budget;
-                    info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
-
-                    long danaEvent = info(P).needBudget;
-                    info(P).minusBudget = danaEvent - infoR.gradeBudget;
-
-                    R = alokasi(P,C,infoR);
-                    insertFirst(Lrelasi,R);
-
-                    cout<<"Selamat anda berhasil donasi sebesar Rp.500.000\n";
-                    system("pause");
-                }else{
-                     cout<<"Maaf Budget Anda tidak cukup!!";
-                     system("pause");
-                }
-            }else if(pilGrade == 'C'&&C!=NULL){
-                infoR.grade = 'C';
-                infoR.gradeBudget = 250000;
-
-                if(info(C).budget>=250000){
+                if(info(C).budget>=0){
                     long budgetSponsor = info(C).budget;
                     info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
 
@@ -242,11 +223,11 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                      cout<<"Maaf Budget Anda tidak cukup!!";
                      system("pause");
                 }
-        }else if(pilGrade == 'D'&&C!=NULL){
-                infoR.grade = 'D';
-                infoR.gradeBudget = 150000;
+            }else if(pilGrade == 3&&C!=NULL){
+                infoR.grade = 'Platinum';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*50)/100);
 
-                if(info(C).budget>=150000){
+                if(info(C).budget>=0){
                     long budgetSponsor = info(C).budget;
                     info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
 
@@ -262,11 +243,11 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                      cout<<"Maaf Budget Anda tidak cukup!!";
                      system("pause");
                 }
-        }else if(pilGrade == 'E'&&C!=NULL){
-                infoR.grade = 'E';
-                infoR.gradeBudget = 150000;
+        }else if(pilGrade == 4&&C!=NULL){
+                infoR.grade = 'Gold';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*25)/100);
 
-                if(info(C).budget>=150000){
+                if(info(C).budget>=0){
                     long budgetSponsor = info(C).budget;
                     info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
 
@@ -282,11 +263,51 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                      cout<<"Maaf Budget Anda tidak cukup!!";
                      system("pause");
                 }
-        }else if(pilGrade == 'F'&&C!=NULL){
-                infoR.grade = 'F';
-                infoR.gradeBudget = 100000;
+        }else if(pilGrade == 5&&C!=NULL){
+                infoR.grade = 'Silver';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*15)/100);
 
-                if(info(C).budget>=100000){
+                if(info(C).budget>=0){
+                    long budgetSponsor = info(C).budget;
+                    info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
+
+                    long danaEvent = info(P).needBudget;
+                    info(P).minusBudget = danaEvent - infoR.gradeBudget;
+
+                    R = alokasi(P,C,infoR);
+                    insertFirst(Lrelasi,R);
+
+                    cout<<"Selamat anda berhasil donasi sebesar Rp.500.000\n";
+                    system("pause");
+                }else{
+                     cout<<"Maaf Budget Anda tidak cukup!!";
+                     system("pause");
+                }
+        }else if(pilGrade == 6&&C!=NULL){
+                infoR.grade = 'Bronze';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*10)/100);
+
+                if(info(C).budget>=0){
+                    long budgetSponsor = info(C).budget;
+                    info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
+
+                    long danaEvent = info(P).needBudget;
+                    info(P).minusBudget = danaEvent - infoR.gradeBudget;
+
+                    R = alokasi(P,C,infoR);
+                    insertFirst(Lrelasi,R);
+
+                    cout<<"Selamat anda berhasil donasi sebesar Rp.500.000\n";
+                    system("pause");
+                }else{
+                     cout<<"Maaf Budget Anda tidak cukup!!";
+                     system("pause");
+                }
+        }else if(pilGrade == 7&&C!=NULL){
+                infoR.grade = 'Reguler';
+                infoR.gradeBudget = info(C).budget-((info(P).needBudget*5)/100);
+
+                if(info(C).budget>=0){
                     long budgetSponsor = info(C).budget;
                     info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
 
