@@ -14,6 +14,7 @@ using namespace std;
 struct sponsor{
     string namaSponsor;
     long budget,sisaBudget;
+    int counter;
 };
 
 typedef sponsor infotype;

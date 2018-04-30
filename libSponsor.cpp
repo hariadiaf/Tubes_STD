@@ -156,9 +156,11 @@ void insertData(ListChild &L){
     sponsor so;
     do{
     system("CLS");
-    cout<<"Nama Sponsor : "; cin>>so.namaSponsor;
+    cin.ignore();
+    cout<<"Nama Sponsor : "; getline(cin,so.namaSponsor);
     cout<<"Budget : "; cin>>so.budget;
     so.sisaBudget = so.budget;
+    so.counter = 0;
     insertFirst(L,alokasi(so));
     cout<<"1.Tambah Data Sponsor Lagi\n";
     cout<<"2.Kembali\n";

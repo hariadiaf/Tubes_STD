@@ -163,7 +163,8 @@ void tambahEvent(ListEvent &L){
     while(menu != 2){
         do{
             system("CLS");
-            cout<<"Nama Event               : "; cin>>ev.nameEvent;
+            cin.ignore();
+            cout<<"Nama Event               : "; getline(cin,ev.nameEvent);
             cout<<"Dana yang dibutuhkan     : "; cin>>ev.needBudget;
             ev.minusBudget=ev.needBudget;
             ev.plusBudget=0;
