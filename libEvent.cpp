@@ -168,6 +168,7 @@ void tambahEvent(ListEvent &L){
             cout<<"Dana yang dibutuhkan     : "; cin>>ev.needBudget;
             ev.minusBudget=ev.needBudget;
             ev.plusBudget=0;
+            ev.counter = 0;
             address_parent P = alokasiEvent(ev);
             insertFirstEvent(L,P);
             cout<<"1.Tambah Data Event Lagi\n";
@@ -183,7 +184,7 @@ void hapusEvent(ListEvent &L, string namaEv, address_parent &P){
     bool found=false;
     // P = cariEvent(L,namaEv);
     if(P==NULL){
-        cout<<"Data tidak ditemukan";
+        cout<<"Data tidak ditemukan\n";
     }else{
         if(P==first(L)){
             deleteFirstEvent(L,P);

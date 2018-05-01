@@ -17,6 +17,7 @@ struct event{
     long needBudget;
     long minusBudget;
     long plusBudget;
+    int counter;
 };
 typedef event infotypes;
 typedef struct elmListEvent *address_parent;

@@ -90,7 +90,7 @@ void deleteLast(ListChild &L, address_child P){
 address_child cariSponsor(ListChild L,string namaSpo){
     address_child P;
     if(first(L) == NULL){
-        cout<<"Sponsor tidak ditemukan!";
+        return NULL;
     }else{
         address_child Q = first(L);
         bool found = false;
@@ -120,9 +120,9 @@ void show(ListChild &L){
     while(P != NULL){
         cout<<" "<<setiosflags(ios::right)<<setw(7);
         cout<<" "<<setiosflags(ios::left)<<setw(3)<<i++;
-        cout<<" "<<setiosflags(ios::left)<<setw(15)<<info(P).namaSponsor;
-        cout<<" "<<setiosflags(ios::left)<<setw(30)<<info(P).budget;
-        cout<<" "<<setiosflags(ios::left)<<setw(25)<<info(P).sisaBudget<<endl;
+        cout<<" "<<setiosflags(ios::left)<<setw(20)<<info(P).namaSponsor;
+        cout<<" "<<setiosflags(ios::left)<<setw(27)<<info(P).budget;
+        cout<<" "<<setiosflags(ios::left)<<setw(30)<<info(P).sisaBudget<<endl;
         P = next(P);
     }
 }
@@ -166,11 +166,6 @@ void insertData(ListChild &L){
     cout<<"2.Kembali\n";
     cout<<"Pilih Menu : "; cin>>menu;
     }while(menu == 1);
-
-    if(menu == 2){
-        system("CLS");
-        MenuSponsor(L);
-    }
 }
 
 

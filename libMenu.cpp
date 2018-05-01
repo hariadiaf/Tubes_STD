@@ -17,8 +17,8 @@ void menuUtama(ListEvent Levent, ListChild Lsponsor, List_relasi Lrelasi){
         cout<<"  Masukan pilihan [1/2/3/4] : "; cin>>pil;
 
         switch(pil){
-            case 1 : menuEvent(Levent); break;
-            case 2 : MenuSponsor(Lsponsor); break;
+            case 1 : menuEvent(Levent,Lrelasi); break;
+            case 2 : MenuSponsor(Lsponsor,Lrelasi); break;
             case 3 : menuRelasi(Levent,Lsponsor,Lrelasi);break;
             case 4 : exit(0);break;
 
@@ -26,7 +26,7 @@ void menuUtama(ListEvent Levent, ListChild Lsponsor, List_relasi Lrelasi){
         }
     }while(pil!=1||pil!=2);
 }
-void menuEvent(ListEvent &L){
+void menuEvent(ListEvent &L, List_relasi &Lrelasi){
     char menu;
     while(menu != '3'){
     do{
@@ -64,18 +64,28 @@ void menuEvent(ListEvent &L){
                     cout<<"Tidak ada event bernama "<<nmEvent<<" "<<endl;
                     system("pause");
                     system("CLS");
-                    menuEvent(L);
+                    menuEvent(L,Lrelasi);
                 }else{
-                    cout<<info(P).nameEvent;
-                    cout<<info(P).needBudget;
+                    cout<<"Nama Event : "<<info(P).nameEvent<<endl;
+                    cout<<"Budget Yang dibutuhkan : "<<info(P).needBudget<<endl;
+                    cout<<"Budget Kurang : "<<info(P).minusBudget<<endl;
                     cout<<"\nApakah anda yakin menghapus data ini ? [y/t] "; cin>>pil;
                     if(pil == 'y'){
+                        address_relasi R = first(Lrelasi);
+                        while(R != NULL){
+                            if(info(P).nameEvent == info(parent(R)).nameEvent){
+                                deleteData(Lrelasi,R);
+                            }
+                            R = next(R);
+                        }
+
+
                         hapusEvent(L,nmEvent,P);
                         system("CLS");
-                        menuEvent(L);
+                        menuEvent(L,Lrelasi);
                     }else if(pil == 't'){
                         system("CLS");
-                        menuEvent(L);
+                        menuEvent(L,Lrelasi);
                     }
                 }
             }/*else{
@@ -85,7 +95,7 @@ void menuEvent(ListEvent &L){
     }
 }
 
-void MenuSponsor(ListChild &Lsponsor){
+void MenuSponsor(ListChild &Lsponsor, List_relasi &Lrelasi){
     int menu = 0;
     system("cls");
     tengah2(120,"=====================================\n");
@@ -116,20 +126,31 @@ void MenuSponsor(ListChild &Lsponsor){
         cout<<"Cari Nama Sponsor : "; cin>>nmSponsor;
         address_child P = cariSponsor(Lsponsor,nmSponsor);
         if(P == NULL){
-            cout<<"Tidak Ditemukan";
+            cout<<"Tidak Ditemukan\n";
             system("pause");
             system("CLS");
-            MenuSponsor(Lsponsor);
+            MenuSponsor(Lsponsor,Lrelasi);
         }else{
-            cout<<info(P).namaSponsor;
+            cout<<"Nama Sponsor : "<<info(P).namaSponsor<<endl;
+            cout<<"Budget Awal : "<<info(P).budget<<endl;
+            cout<<"Sisa Budget : "<<info(P).sisaBudget<<endl;
             cout<<"\nApakah anda yakin menghapus data ini ? [y/t] "; cin>>pil;
             if(pil == 'y'){
+
+                address_relasi R = first(Lrelasi);
+                while(R != NULL){
+                    if(info(P).namaSponsor == info(child(R)).namaSponsor){
+                        deleteData(Lrelasi,R);
+                    }
+                    R = next(R);
+                }
+
                 deleteData(Lsponsor,nmSponsor,P);
                 system("CLS");
-                MenuSponsor(Lsponsor);
+                MenuSponsor(Lsponsor,Lrelasi);
             }else if(pil == 't'){
                 system("CLS");
-                MenuSponsor(Lsponsor);
+                MenuSponsor(Lsponsor,Lrelasi);
             }
         }
 
@@ -173,6 +194,7 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                 system("cls");
                 cout<<"Nama Event : "<<info(P).nameEvent<<endl;
                 cout<<"Dana Yang Dibutuhkan : "<<info(P).needBudget<<endl;
+                cout<<"Dana Yang Baru Terkumpul : "<<info(P).minusBudget<<endl;
                 cout<<"Grade Dukungan : \n";
                 cout<<"1.Super-Uranium = 100%\n";
                 cout<<"2.Uranium = 65%\n";
@@ -181,107 +203,157 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                 cout<<"5.Silver = 15%\n";
                 cout<<"6.Bronze = 10%\n";
                 cout<<"7.Reguler = 5%\n";
-                cout<<"8.Lainnya\n";
                 cout<<"Pilih Grade Dukungan : "; cin>>pilGrade;
                 cout<<"Masukan nama sponsor anda : "; cin>>nmSponsor;
                 C = cariSponsor(Lsponsor,nmSponsor);
             if(C == NULL){
-                cout<<"Sponsor tidak ditemukan !!";
+                cout<<"Sponsor tidak ditemukan !!\n";
                 system("pause");
-            }
-
+            }else{
                 if(pilGrade == 1&&C!=NULL){
-                    infoR.grade = "Super-Uranium";
-                    infoR.gradeBudget = ((info(P).needBudget*100)/100);
-
-                    if(info(C).budget>=info(R).gradeBudget){
-                        long budgetSponsor = info(C).budget;
-                        if(info(C).counter == 0){
-                            info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
-                            info(C).counter = info(C).counter+1;
-                        }else if(info(C).counter >= 1){
-                            info(C).sisaBudget = info(C).sisaBudget - infoR.gradeBudget;
-                            info(C).counter = info(C).counter+1;
-                        }
-
-                        long danaEvent = info(P).needBudget;
-                        info(P).minusBudget = danaEvent - infoR.gradeBudget;
-
-                        R = alokasi(P,C,infoR);
-                        insertFirst(Lrelasi,R);
-
-                        cout<<"Selamat anda berhasil donasi sebesar "<<info(R).gradeBudget<<"\n";
-                        cout<<info(C).counter;
-                        system("pause");
-                    }else{
-                         cout<<"Maaf Budget Anda tidak cukup!!";
-                         system("pause");
-                    }
-
-
-
-
+                    //
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Super-Uranium",100);
                 }else if(pilGrade == 2&&C!=NULL){
-                    infoR.grade = "Uranium";
-                    infoR.gradeBudget = ((info(P).needBudget*65)/100);
-
-                    if(info(C).budget>=0){
-                        long budgetSponsor = info(C).budget;
-                        info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
-
-                        long danaEvent = info(P).needBudget;
-                        info(P).minusBudget = danaEvent - infoR.gradeBudget;
-
-                        R = alokasi(P,C,infoR);
-                        insertFirst(Lrelasi,R);
-
-                        cout<<"Selamat anda berhasil donasi sebesar "<<info(R).gradeBudget<<"\n";
-                        system("pause");
-                    }else{
-                         cout<<"Maaf Budget Anda tidak cukup!!";
-                         system("pause");
-                    }
-
-
-
-
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Uranium",65);
+                }else if(pilGrade == 3&&C!=NULL){
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Platinum",50);
+                }else if(pilGrade == 4&&C!=NULL){
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Gold",25);
+                }else if(pilGrade == 5&&C!=NULL){
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Silver",15);
+                }else if(pilGrade == 6&&C!=NULL){
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Bronze",10);
+                }else if(pilGrade == 7&&C!=NULL){
+                    olahData(Levent,Lsponsor,Lrelasi,P,C,"Reguler",5);
                 }
             }
+
+            }
         }else{
-            cout<<"Silahkan tambah event terlebih dahulu\n";
+            cout<<"Silahkan tambah event & sponsor terlebih dahulu\n";
             system("pause");
         }
 
 
  }else if(pilih == 2){
         system("cls");
-        //cout<<"Masukan Nama Sponsor : "; cin>>nmSponsor;
+        int i = 1;
+        cout<<"Masukan Nama Sponsor : "; cin>>nmSponsor;
+        address_child C = cariSponsor(Lsponsor,nmSponsor);
+
         address_relasi R = first(Lrelasi);
-        if(R==NULL){
-            cout<<"NULL";
-        }else{
-            cout<<info(parent(R)).nameEvent;
-        }
-        /*while(R != NULL){
+
+        if(R != NULL && C != NULL){
+        cout<<"Nama Sponsor : "<<nmSponsor<<endl;
+        tengah2(5,"No. ");
+        tengah2(15,"Nama Event ");
+        tengah2(25,"Grade");
+        tengah2(35,"Besar Donasi ");
+        cout<<endl;
+        while(R != NULL){
             if(info(child(R)).namaSponsor == nmSponsor){
-                cout<<info(parent(R)).nameEvent<<"\n";
-                cout<<info(parent(R)).needBudget<<"\n";
-                cout<<info(parent(R)).minusBudget<<"\n";
-                cout<<info(child(R)).namaSponsor<<"\n";
-                cout<<info(child(R)).budget<<"\n";
-                cout<<info(child(R)).sisaBudget<<"\n";
-
-
-                cout<<"\n\n";
+                    cout<<" "<<setiosflags(ios::left)<<setw(0)<<i++;
+                    cout<<" "<<setiosflags(ios::left)<<setw(8)<<info(parent(R)).nameEvent;
+                    cout<<" "<<setiosflags(ios::left)<<setw(23)<<info(R).grade;
+                    cout<<" "<<setiosflags(ios::left)<<setw(15)<<info(R).gradeBudget<<endl;
             }
             R = next(R);
         }
+        cout<<"\n1. Batal Donasi\n";
+        cout<<"2. Kembali\n";
+        cout<<"Pilih Menu : "; cin>>pilih;
+        if(pilih == 1){
+            cout<<"Masukan Nama Event : "; cin>>nmevent;
+            address_parent P = cariEvent(Levent,nmevent);
+            address_relasi Q = findElm(Lrelasi,P,C);
 
-            system("pause");
-    }*/
-    system("pause");
+            if(Q != NULL){
+                info(C).sisaBudget = info(C).sisaBudget+info(Q).gradeBudget;
+                info(P).minusBudget = info(P).minusBudget+info(Q).gradeBudget;
+                if(info(P).plusBudget > 0){
+                    info(P).plusBudget = info(P).plusBudget-info(Q).gradeBudget;
+                }
+
+                if(next(Q) == NULL){
+                    cout<<"\n";
+                }else{
+                    //cout<<info(parent(next(Q))).nameEvent;
+                }
+
+
+                deleteData(Lrelasi,Q);
+                cout<<"Berhasil\n";
+            }else{
+                cout<<"Tidak Ditemukan\n";
+            }
+        }
+
+        }else{
+            cout<<"Tidak ada relasi\n";
+        }
+
+        system("pause");
     }
 }
 
+void olahData(ListEvent &Levent,ListChild &Lsponsor, List_relasi &Lrelasi,
+              address_parent P, address_child C,string grade,int persen){
+relasi infoR;
+address_relasi R;
+infoR.grade = grade;
+infoR.gradeBudget = ((info(P).needBudget*persen)/100);
+
+if(info(C).sisaBudget>=infoR.gradeBudget){
+    long budgetSponsor = info(C).budget;
+    if(info(C).counter == 0){
+        info(C).sisaBudget = budgetSponsor - infoR.gradeBudget;
+        info(C).counter = info(C).counter+1;
+    }else if(info(C).counter >= 1){
+        info(C).sisaBudget = info(C).sisaBudget - infoR.gradeBudget;
+        info(C).counter = info(C).counter+1;
+    }
+
+
+    if(info(P).counter == 0){
+        if(info(P).minusBudget<=0){
+            info(P).plusBudget = -(info(P).minusBudget-infoR.gradeBudget);
+            info(P).minusBudget = 0;
+        }else{
+            info(P).minusBudget = info(P).minusBudget-infoR.gradeBudget;
+        }
+        info(P).counter = info(P).counter+1;
+    }else if(info(P).counter == 1){
+        if(info(P).minusBudget<=0){
+            info(P).plusBudget = -(info(P).minusBudget-infoR.gradeBudget);
+            info(P).minusBudget = 0;
+        }else{
+            info(P).minusBudget = info(P).minusBudget-infoR.gradeBudget;
+        }
+        info(P).counter = info(P).counter+1;
+    }else{
+        info(P).plusBudget = info(P).plusBudget+infoR.gradeBudget;
+        info(P).counter = info(P).counter+1;
+    }
+
+
+    R = alokasi(P,C,infoR);
+    insertFirst(Lrelasi,R);
+
+    cout<<"Selamat anda berhasil donasi sebesar "<<info(R).gradeBudget<<"\n";
+    cout<<info(C).counter;
+    system("pause");
+}else{
+     cout<<"Maaf Budget Anda tidak cukup!!\n";
+     system("pause");
+}
+
+
+
+
+
+
+
+
+}
 
 
