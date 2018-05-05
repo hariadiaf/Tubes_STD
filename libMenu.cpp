@@ -194,7 +194,7 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
                 system("cls");
                 cout<<"Nama Event : "<<info(P).nameEvent<<endl;
                 cout<<"Dana Yang Dibutuhkan : "<<info(P).needBudget<<endl;
-                cout<<"Dana Yang Baru Terkumpul : "<<info(P).minusBudget<<endl;
+                cout<<"Dana Lebih : "<<info(P).plusBudget<<endl;
                 cout<<"Grade Dukungan : \n";
                 cout<<"1.Super-Uranium = 100%\n";
                 cout<<"2.Uranium = 65%\n";
@@ -263,7 +263,9 @@ void menuRelasi(ListEvent &Levent, ListChild &Lsponsor, List_relasi &Lrelasi){
         cout<<"2. Kembali\n";
         cout<<"Pilih Menu : "; cin>>pilih;
         if(pilih == 1){
-            cout<<"Masukan Nama Event : "; cin>>nmevent;
+            //cout<<"Masukan Nama Event : "; cin>>nmevent;
+            cin.ignore();
+            cout<<"Masukan Nama Event : "; getline(cin,nmevent);;
             address_parent P = cariEvent(Levent,nmevent);
             address_relasi Q = findElm(Lrelasi,P,C);
 
